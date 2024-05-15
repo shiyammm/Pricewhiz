@@ -2,6 +2,7 @@
 import React, { FormEvent, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { ScrapeAndStoreAmazonProduct } from '@/lib/action';
 
 const SearchInput = () => {
   const [searchInput, setSearchInput] = useState('');
@@ -12,11 +13,8 @@ const SearchInput = () => {
       const paseUrl = new URL(url);
       const hostname = paseUrl.hostname;
 
-      if (hostname.includes('amazon.com') || hostname.includes('amazon')) {
+      if (hostname.includes('amazon.com') || hostname.includes('amazon'))
         return true;
-      } else {
-        alert('Please enter valid amazon url');
-      }
     } catch (error) {
       console.log(error);
     }
@@ -24,12 +22,17 @@ const SearchInput = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSearching(true);
+
+    const isValidAmazonProductUrl = isValid(searchInput);
+
+    if (!isValidAmazonProductUrl) {
+      alert('Please enter valid Amazon Product url');
+    }
     try {
-      const isValidAmazonProductUrl = isValid(searchInput);
+      setIsSearching(true);
+      const product = await ScrapeAndStoreAmazonProduct(searchInput);
     } catch (error) {
       console.log(error);
-    } finally {
       setIsSearching(false);
     }
   };
