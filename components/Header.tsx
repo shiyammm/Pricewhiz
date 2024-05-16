@@ -3,9 +3,9 @@ import { ModeToggle } from './ui/ModeToggle';
 
 const Header = () => {
   return (
-    <header className="flex justify-between items-center px-10 absolute w-full py-8">
+    <header className="flex justify-between items-center absolute w-full p-4 md:px-7 md:py-7">
       <nav>
-        <span className="text-2xl font-semibold">Price Whiz</span>
+        <span className="text-xl font-bold lg:text-2xl ">Price Whiz</span>
       </nav>
       <div>
         <ModeToggle />

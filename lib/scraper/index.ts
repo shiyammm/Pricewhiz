@@ -61,7 +61,7 @@ export async function ScrapeAmazonProduct(url: string) {
     const category = $('span.nav-a-content img.nav-categ-image').attr('alt');
 
     const outOfStock =
-      $('#availability span').text().toLowerCase() == 'Currently unavailable';
+      $('#availability span').text().toLowerCase() == 'Currently unavailable.';
 
     const data = {
       url,
@@ -81,7 +81,6 @@ export async function ScrapeAmazonProduct(url: string) {
       highestPrice: Number(originalPrice) || Number(currentPrice),
       averagePrice: Number(currentPrice) || Number(originalPrice),
     };
-    console.log(data);
     return data;
   } catch (error: any) {
     throw new Error(`Failed to fetch the product ${error}`);

@@ -30,28 +30,30 @@ const SearchInput = () => {
     }
     try {
       setIsSearching(true);
+      setSearchInput('');
       const product = await ScrapeAndStoreAmazonProduct(searchInput);
     } catch (error) {
       console.log(error);
+    } finally {
       setIsSearching(false);
     }
   };
 
   return (
     <form
-      className="flex w-full max-w-lg items-center space-x-2 mt-8"
+      className="flex max-w-lg items-center space-x-2 mt-8 w-full"
       onSubmit={handleSubmit}
     >
       <Input
         type="search"
         placeholder="Paste your amazon product url"
-        className="text-md"
+        className="text-md max-w-lg"
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
       />
       <Button
         type="submit"
-        className="py-5 px-6 text-md"
+        className="py-5 px-2 md:px-4 text-md"
         disabled={searchInput === ''}
       >
         {isSearching ? 'Searching...' : 'Search'}
