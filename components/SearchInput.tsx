@@ -3,10 +3,12 @@ import React, { FormEvent, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrapeAndStoreAmazonProduct } from '@/lib/action';
+import { useRouter } from 'next/navigation';
 
 const SearchInput = () => {
   const [searchInput, setSearchInput] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const router = useRouter();
 
   const isValid = (url: string) => {
     try {
@@ -32,6 +34,11 @@ const SearchInput = () => {
       setIsSearching(true);
       setSearchInput('');
       const product = await ScrapeAndStoreAmazonProduct(searchInput);
+      if (product && product._id) {
+        router.push(`/products/${product._id}`);
+      } else {
+        alert('Failed to scrape and store product');
+      }
     } catch (error) {
       console.log(error);
     } finally {

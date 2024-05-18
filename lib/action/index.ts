@@ -10,6 +10,7 @@ import {
   getLowestPrice,
 } from '../scraperUtils';
 import { User } from '../types';
+import { generateEmailContent, sendEmail } from '../nodemailer';
 
 export async function ScrapeAndStoreAmazonProduct(productUrl: string) {
   if (!productUrl) return;
@@ -25,6 +26,7 @@ export async function ScrapeAndStoreAmazonProduct(productUrl: string) {
 
     const existingProduct = await Product.findOne({ url: scrapedProduct.url });
 
+    // Check if the product is already exists, if it does update the price history
     if (existingProduct) {
       const updatedPriceHistory: any = [
         ...existingProduct.priceHistory,
@@ -38,8 +40,14 @@ export async function ScrapeAndStoreAmazonProduct(productUrl: string) {
         highestPrice: getHighestPrice(updatedPriceHistory),
         averagePrice: getAveragePrice(updatedPriceHistory),
       };
+
+      const serializedExistingProduct = JSON.parse(
+        JSON.stringify(existingProduct),
+      );
+      return serializedExistingProduct;
     }
 
+    // If the product is no already exists in the DB add it to the productItems
     const newProduct = await Product.findOneAndUpdate(
       { url: scrapedProduct.url },
       product,
@@ -47,6 +55,10 @@ export async function ScrapeAndStoreAmazonProduct(productUrl: string) {
     );
 
     revalidatePath(`/products/${newProduct._id}`);
+
+    // Serialize  the product to get the Id of the product to redirect the user to product page
+    const serializedNewProduct = JSON.parse(JSON.stringify(newProduct));
+    return serializedNewProduct;
   } catch (error: any) {
     throw new Error(`Failed to create/update product ${error}`);
   }
@@ -85,6 +97,10 @@ export async function addUserEmail(_id: string, userEmail: string) {
     if (!existingUser) {
       product.users.push({ email: userEmail });
       await product.save();
+
+      const emailContent = await generateEmailContent(product, 'WELCOME');
+
+      await sendEmail(emailContent, [userEmail]);
     }
   } catch (error) {}
 }
