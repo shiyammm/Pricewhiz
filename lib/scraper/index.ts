@@ -70,7 +70,7 @@ export async function ScrapeAmazonProduct(url: string) {
 
     const stock = $('#availability span').text().trim().toLowerCase();
 
-    const outOfStock = stock.includes('currently unavailable.');
+    const isOutOfStock = stock.includes('currently unavailable.');
 
     const data = {
       url,
@@ -84,7 +84,7 @@ export async function ScrapeAmazonProduct(url: string) {
       currentPrice,
       currencySymbol: currencySymbol ? currencySymbol : '',
       originalPrice,
-      outOfStock,
+      isOutOfStock: isOutOfStock,
       priceHistory: [],
       lowestPrice: Number(currentPrice) || Number(originalPrice),
       highestPrice: Number(originalPrice) || Number(currentPrice),

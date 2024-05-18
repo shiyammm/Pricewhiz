@@ -9,7 +9,7 @@ export type User = {
 export type Product = {
   _id?: string;
   url: string;
-  currency: string;
+  currencySymbol: string;
   image: string;
   title: string;
   currentPrice: number;
@@ -20,11 +20,11 @@ export type Product = {
   averagePrice: number;
   discountRate: number;
   description: string;
-  category: string;
-  reviewsCount: number;
-  stars: number;
+  category: string | undefined;
   isOutOfStock: Boolean;
   users?: User[];
+  ratings: string;
+  stars: string;
 };
 
 export type NotificationType =
