@@ -86,11 +86,11 @@ export async function getSingleProduct(_id: string) {
 
 export async function addUserEmail(_id: string, userEmail: string) {
   try {
-    connectToDB();
-
     const product = await Product.findById({ _id });
 
-    const existingUser = await product.users.some(
+    if (!product) return;
+
+    const existingUser = product.users.some(
       (user: User) => user.email === userEmail,
     );
 
@@ -102,5 +102,7 @@ export async function addUserEmail(_id: string, userEmail: string) {
 
       await sendEmail(emailContent, [userEmail]);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 }

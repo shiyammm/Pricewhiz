@@ -19,7 +19,6 @@ export type Product = {
   lowestPrice: number;
   averagePrice: number;
   discountRate: number;
-  description: string;
   category: string | undefined;
   isOutOfStock: Boolean;
   users?: User[];

@@ -62,8 +62,6 @@ export async function ScrapeAmazonProduct(url: string) {
       $('.a-size-base.a-color-price'),
     );
 
-    const description = extractDescription($);
-
     const discount = extractDiscount($('.savingsPercentage'));
 
     const category = $('span.nav-a-content img.nav-categ-image').attr('alt');
@@ -76,7 +74,6 @@ export async function ScrapeAmazonProduct(url: string) {
       url,
       title,
       image: imgUrls[0],
-      description,
       discountRate: Number(discount),
       category,
       ratings,
